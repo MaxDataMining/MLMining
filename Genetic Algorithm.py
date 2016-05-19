@@ -4,6 +4,9 @@ import pickle
 import itertools
 import sys
 
+# genetic algorithm for selecting the best features from the Algebra I 2005-2006 dataset of the KDD Cup 2010 competition
+# best features will be used as the nearest neighbors in a KNN algorithm
+
 class GenePool():
 
     def __init__(self, sample, population, cross_coefficient=0.1, elitism=0.05, mutation=0.05,
@@ -38,12 +41,7 @@ class GenePool():
             gene = Genes(self, '%i' % (len(self) + 1), dna)
             self[gene.name] = gene
 
-    def next_gene(self):
-        """
-        :returns: A gene to be used.
-        :rtype: Genes
-
-        """
+    def next_gene(self): # returns the next gene in the chromosome
         self.calls += 1
         if self.calls >= self.population:
             self.calls = 0
@@ -128,8 +126,7 @@ class GenePool():
         for gene in self:
             gene.lock = False
 
-    def crossover(self, gene1, gene2):
-        """Two-Point cross-over"""
+    def crossover(self, gene1, gene2): # crossover/recombination between two genes
         cross_point1, cross_point2 = None, None
         while not cross_point2 and not cross_point1:
             cross_point1 = random.randint(0, len(gene1))
@@ -143,13 +140,7 @@ class GenePool():
         self.replace_gene(gene1, new_dna1, result, rank)
         self.replace_gene(gene2, new_dna2, result, rank)
 
-    def return_result(self, gene, result):
-        """Return here the gene, it's fitness result. Set force to True to run the GA in the gene_pool
-        :param gene: The gene which was run.
-        :type gene: Genes
-        :param result: The fitness result.
-        :type result: int
-        """
+    def return_result(self, gene, result) # return the result of the fitness score for the genes in the current run
         gene.result += result
         self.total_result += gene.result
 
@@ -215,21 +206,8 @@ class GenePool():
 
 
 class Genes():
-    """
-    A gene which mutates based on it's gene_pool settings
-
-    :param gene_pool: Where all genes are stored and the GA will run
-    :type gene_pool: GenePool
-    :param dna: The core of the gene, it's based on the sample set on the gene_pool.
-    :type dna: list
-    :param result: The current fitness result of the gene.
-    :type result: int
-    :param rank: The result from 0.0 to 1.0 of the gene in the gene_pool.
-    :type rank: float
-    """
-
+# the genes are the training data from the KDD 2010 Cup Algebra I 2005-2006 dataset. All the features are being used
     def __init__(self, gene_pool, name, dna, result=0, rank=0):
-        """should be instantiated by genePool.newGenes()"""
         self.name = name
         self.gene_pool = gene_pool
         self.dna = dna
