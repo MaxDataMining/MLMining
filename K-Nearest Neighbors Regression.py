@@ -24,7 +24,7 @@ def main(featureFile, outputfolder):
     # y columns show the predicted feature, in this case, the correct first attempt
     y_column = ["Correct First Attempt"]
 
-    # Look at the Ten closest neighbors.
+    # Look at the Ten closest neighbors, to offset potential noise in the data
     knn = KNeighborsRegressor(n_neighbors=10)
     knn.fit(train[x_columns], train[y_column])
 
